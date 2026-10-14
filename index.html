@@ -1,0 +1,330 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow, noarchive">
+<meta name="referrer" content="no-referrer">
+<title>Optimizo — Cotización audiovisual</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --hueso:#EDEEE8; --superficie:#F6F6F1; --blanco:#fff;
+  --navy:#26405B; --navy-prof:#16263A; --tinta:#14212F;
+  --acento:#59BDB1; --acento-claro:#91CEC4; --acento-osc:#387E80;
+  --borde:rgba(38,64,91,.14); --sombra:0 1px 0 rgba(255,255,255,.8) inset,0 10px 24px -14px rgba(22,38,58,.35);
+  --deg:linear-gradient(90deg,#91CEC4,#387E80);
+}
+@media (prefers-color-scheme:dark){
+  :root{--hueso:#16263A;--superficie:#1d3149;--blanco:#243b57;--navy:#dfe6ec;--tinta:#EDEEE8;--borde:rgba(237,238,232,.16);--sombra:0 10px 24px -14px rgba(0,0,0,.6)}
+}
+*{box-sizing:border-box;margin:0}
+html,body{height:100%}
+body{background:var(--hueso);color:var(--navy);font-family:Inter,system-ui,-apple-system,"Segoe UI",sans-serif;overflow:hidden}
+button{font:inherit;cursor:pointer}
+a{color:inherit}
+
+/* barra superior */
+.top{position:fixed;inset:0 0 auto 0;height:56px;display:flex;align-items:center;gap:14px;padding:0 20px;z-index:20;background:color-mix(in srgb,var(--hueso) 88%,transparent);backdrop-filter:blur(8px);border-bottom:1px solid var(--borde)}
+.marca{display:flex;align-items:center;gap:9px;font-weight:700;color:var(--tinta);letter-spacing:-.01em}
+.marca svg{width:26px;height:26px}
+.top .sec{font-size:13px;opacity:.7;margin-left:4px}
+.top .sp{flex:1}
+.chip-carro{display:flex;align-items:center;gap:8px;border:1px solid var(--borde);background:var(--blanco);color:var(--tinta);border-radius:999px;padding:7px 14px;font-weight:600;font-size:13px}
+.chip-carro b{background:var(--deg);color:#fff;border-radius:999px;min-width:22px;height:22px;display:grid;place-items:center;font-size:12px;padding:0 6px}
+.prog{position:fixed;top:56px;left:0;height:3px;background:var(--deg);width:0;z-index:21;transition:width .4s}
+
+/* diapositivas */
+.deck{position:fixed;inset:59px 0 64px 0}
+.slide{position:absolute;inset:0;overflow-y:auto;padding:34px clamp(18px,5vw,72px) 40px;opacity:0;visibility:hidden;transform:translateX(40px);transition:opacity .35s,transform .35s,visibility .35s}
+.slide.on{opacity:1;visibility:visible;transform:none}
+.slide.prev{transform:translateX(-40px)}
+.in{max-width:1240px;margin:0 auto}
+.ceja{display:inline-flex;align-items:center;gap:8px;font-size:12px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--acento-osc)}
+.ceja::before{content:"";width:9px;height:9px;border-radius:50%;background:var(--deg)}
+h1,h2{color:var(--tinta);letter-spacing:-.025em;line-height:1.05}
+h2{font-size:clamp(28px,4vw,44px);margin:10px 0 6px;font-weight:800}
+.baja{font-size:clamp(15px,1.5vw,18px);opacity:.78;max-width:62ch;line-height:1.5}
+.cab{display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:12px;margin-bottom:24px}
+.sel-estado{font-size:13px;border:1px dashed var(--borde);border-radius:999px;padding:7px 14px}
+.sel-estado.ok{border-style:solid;border-color:var(--acento);color:var(--acento-osc);font-weight:600}
+
+/* portada */
+.portada{min-height:100%;display:grid;align-content:center;justify-items:start;gap:22px}
+.portada h1{font-size:clamp(40px,7.5vw,92px);font-weight:800;max-width:14ch}
+.portada h1 span{background:var(--deg);-webkit-background-clip:text;background-clip:text;color:transparent}
+.portada .meta{display:flex;flex-wrap:wrap;gap:10px}
+.portada .meta span{border:1px solid var(--borde);background:var(--blanco);border-radius:999px;padding:7px 14px;font-size:13px}
+.btn-prim{border:0;border-radius:14px;padding:14px 24px;font-weight:700;color:#fff;background:linear-gradient(180deg,#59BDB1,#387E80);box-shadow:0 1px 0 rgba(255,255,255,.35) inset,0 -2px 0 rgba(0,0,0,.18) inset,0 12px 22px -12px rgba(56,126,128,.8);transition:transform .15s}
+.btn-prim:active{transform:translateY(2px)}
+.disco{position:absolute;right:clamp(10px,6vw,90px);top:50%;transform:translateY(-50%);width:clamp(150px,30vw,380px);opacity:.95;pointer-events:none}
+
+/* productos */
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:18px}
+.grid.uno{grid-template-columns:minmax(260px,420px)}
+.card{display:flex;flex-direction:column;background:var(--superficie);border:1px solid var(--borde);border-radius:20px;overflow:hidden;box-shadow:var(--sombra);transition:transform .2s,border-color .2s,box-shadow .2s}
+.card.elegido{border-color:var(--acento);box-shadow:0 0 0 3px color-mix(in srgb,var(--acento) 35%,transparent),var(--sombra)}
+.foto{position:relative;aspect-ratio:5/4;background:#fff;display:grid;place-items:center}
+.foto img{width:100%;height:100%;object-fit:contain;padding:10px}
+.foto .falta{display:none;text-align:center;padding:18px;color:#26405B;font-size:13px;line-height:1.4}
+.foto .falta svg{width:38px;height:38px;opacity:.5;margin-bottom:8px}
+.foto.sin img{display:none}
+.foto.sin .falta{display:block}
+.etq{position:absolute;top:10px;left:10px;font-size:11px;font-weight:700;background:var(--navy-prof);color:#fff;border-radius:999px;padding:4px 10px}
+.etq.nuevo{background:var(--acento-osc)}
+.cuerpo{display:flex;flex-direction:column;gap:8px;padding:16px 16px 18px;flex:1}
+.nom{font-weight:700;font-size:16px;color:var(--tinta);line-height:1.25}
+.precio{font-size:24px;font-weight:800;color:var(--tinta);letter-spacing:-.02em}
+.precio small{font-size:13px;font-weight:600;opacity:.7}
+.desc{font-size:13.5px;line-height:1.5;opacity:.82;flex:1}
+.acc{display:flex;flex-direction:column;gap:9px;margin-top:6px}
+.ver{font-size:13px;font-weight:600;text-decoration:none;color:var(--acento-osc);display:inline-flex;gap:6px;align-items:center}
+.ver:hover{text-decoration:underline}
+.elegir{width:100%;border:1px solid var(--borde);background:var(--blanco);color:var(--tinta);border-radius:12px;padding:12px;font-weight:700;transition:all .15s}
+.elegir:hover{border-color:var(--acento)}
+.elegir.on{background:linear-gradient(180deg,#59BDB1,#387E80);color:#fff;border-color:transparent}
+
+/* carrito */
+.carro{display:grid;grid-template-columns:minmax(0,1.6fr) minmax(280px,1fr);gap:22px;align-items:start}
+@media(max-width:860px){.carro{grid-template-columns:1fr}.disco{display:none}}
+.lista{background:var(--superficie);border:1px solid var(--borde);border-radius:20px;overflow:hidden}
+.fila{display:grid;grid-template-columns:64px 1fr auto auto;gap:14px;align-items:center;padding:14px 16px;border-bottom:1px solid var(--borde)}
+.fila:last-child{border-bottom:0}
+.fila .mini{width:64px;height:64px;border-radius:12px;background:#fff;display:grid;place-items:center;overflow:hidden}
+.fila .mini img{width:100%;height:100%;object-fit:contain}
+.fila .cat{font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;opacity:.6}
+.fila .n{font-weight:600;color:var(--tinta);font-size:14.5px}
+.fila .p{font-weight:800;color:var(--tinta);white-space:nowrap}
+.quitar{border:0;background:none;color:var(--navy);opacity:.6;font-size:20px;line-height:1;padding:6px}
+.quitar:hover{opacity:1}
+.vacio{padding:34px 20px;text-align:center;opacity:.75;font-size:14px}
+.resumen{background:var(--navy-prof);color:#EDEEE8;border-radius:20px;padding:22px;display:grid;gap:12px;position:sticky;top:0}
+.resumen .l{display:flex;justify-content:space-between;gap:10px;font-size:14px;opacity:.85}
+.resumen .tot{border-top:1px solid rgba(237,238,232,.2);padding-top:14px;display:flex;justify-content:space-between;align-items:baseline}
+.resumen .tot b{font-size:34px;letter-spacing:-.03em;background:var(--deg);-webkit-background-clip:text;background-clip:text;color:transparent}
+.resumen .nota{font-size:12px;opacity:.65;line-height:1.45}
+.resumen label{font-size:12px;opacity:.8;display:grid;gap:5px}
+.resumen input{border-radius:10px;border:1px solid rgba(237,238,232,.25);background:rgba(255,255,255,.07);color:#fff;padding:9px 11px;font:inherit}
+.resumen .btn2{border:1px solid rgba(237,238,232,.3);background:transparent;color:#EDEEE8;border-radius:12px;padding:11px;font-weight:600}
+
+/* navegación inferior */
+.nav{position:fixed;inset:auto 0 0 0;height:64px;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:0 20px;z-index:20;background:color-mix(in srgb,var(--hueso) 90%,transparent);backdrop-filter:blur(8px);border-top:1px solid var(--borde)}
+.nav button.fl{border:1px solid var(--borde);background:var(--blanco);color:var(--tinta);border-radius:12px;padding:10px 16px;font-weight:600}
+.nav button:disabled{opacity:.35;cursor:default}
+.puntos{display:flex;gap:7px;align-items:center;overflow:auto;max-width:50vw;padding:6px}
+.puntos button{width:9px;height:9px;border-radius:50%;border:0;background:color-mix(in srgb,var(--navy) 28%,transparent);flex:none;padding:0;transition:all .2s}
+.puntos button.on{width:26px;border-radius:6px;background:var(--deg)}
+.toast{position:fixed;left:50%;bottom:78px;transform:translate(-50%,20px);background:var(--navy-prof);color:#fff;border-radius:999px;padding:10px 18px;font-size:13px;font-weight:600;opacity:0;pointer-events:none;transition:all .25s;z-index:30}
+.toast.on{opacity:1;transform:translate(-50%,0)}
+@media(max-width:560px){.top .sec{display:none}.fila{grid-template-columns:52px 1fr auto}.fila .p{grid-column:2}.fila .mini{width:52px;height:52px}.nav button.fl span{display:none}}
+@media print{.top,.nav,.prog,.toast{display:none}.deck{position:static}.slide{position:static;opacity:1;visibility:visible;transform:none;break-after:page}body{overflow:visible}}
+@media(prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+
+<header class="top">
+  <div class="marca">
+    <svg viewBox="0 0 138.3 138.3" aria-hidden="true"><defs><linearGradient id="g" x1="0" x2="1"><stop offset="0" stop-color="#91CEC4"/><stop offset="1" stop-color="#387E80"/></linearGradient></defs><path fill="url(#g)" fill-rule="evenodd" d="M69 4a65 65 0 1 0 65 65c0-9-2-18-6-26-12 6-26-2-26-16 0-12-10-22-22-22-4 0-8-1-11-1z"/><circle cx="108" cy="22" r="13" fill="url(#g)"/></svg>
+    Optimizo
+  </div>
+  <span class="sec" id="secName"></span>
+  <span class="sp"></span>
+  <button class="chip-carro" id="chipCarro" aria-label="Ir a la cotización final">Cotización <b id="chipN">0</b></button>
+</header>
+<div class="prog" id="prog"></div>
+
+<main class="deck" id="deck"></main>
+
+<nav class="nav">
+  <button class="fl" id="btnPrev">← <span>Anterior</span></button>
+  <div class="puntos" id="puntos"></div>
+  <button class="fl" id="btnNext"><span>Siguiente</span> →</button>
+</nav>
+<div class="toast" id="toast"></div>
+
+<script>
+/* ============ DATOS ============ */
+// Para agregar la imagen de un producto sin foto: guardar el archivo en img/ con el nombre indicado en "img".
+const CATEGORIAS = [
+  { id:"camaras", nombre:"Cámaras", bajada:"El corazón del equipo: estabilizada, compacta y lista para grabar a diario.", productos:[
+    { id:"pocket3-usada-nd", nombre:"DJI Osmo Pocket 3 usada, con filtro ND", precio:300000, tag:"Usada · Marketplace", img:"img/pocket3-usada-nd.jpg", url:"https://www.facebook.com/marketplace/item/1550710283768898/", desc:"Cámara gimbal de bolsillo DJI en segunda mano. Incluye filtro ND para controlar la luz en exteriores." },
+    { id:"pocket3-usada", nombre:"DJI Osmo Pocket 3 usada", precio:299000, tag:"Usada · Marketplace", img:"img/pocket3-usada.jpg", url:"https://www.facebook.com/marketplace/item/1088846383734889/", desc:"El mismo modelo en segunda mano, sin filtro ND. La opción usada más económica de la Pocket 3." },
+    { id:"pocket2-usada", nombre:"DJI Osmo Pocket 2 usada, con accesorios", precio:240000, tag:"Usada · Marketplace", img:"img/pocket2-usada.jpg", url:"https://www.facebook.com/marketplace/item/2188664688714728/", desc:"Generación anterior de la Pocket, en segunda mano y con accesorios. Entrada más barata al formato gimbal." },
+    { id:"pocket3-nueva", nombre:"DJI Osmo Pocket 3 nueva", precio:419990, tag:"Nueva · Falabella", img:"img/pocket3-nueva.webp", url:"https://www.falabella.com/falabella-cl/product/147560434/Camara-de-accion-DJI-Osmo-Pocket-3/147560435", desc:"Cámara de vlogging con sensor CMOS de 1 pulgada y gimbal. Nueva, con garantía de tienda." },
+    { id:"sjcam-sj8", nombre:"SJCAM SJ8 Dual 4K", precio:114990, tag:"Nueva · SJCAM Chile", img:"img/sjcam-sj8.webp", url:"https://sjcam.cl/detalles.php?id=1388&prod=camara-deportiva-sjcam-sj8-dual-4k-30fps-estabilizacion-eis", desc:"Cámara deportiva 4K a 30 fps con estabilización electrónica (EIS). La alternativa más económica." }
+  ]},
+  { id:"iluminacion", nombre:"Iluminación principal", bajada:"Luz suave y constante para que todo se vea profesional.", productos:[
+    { id:"mizoom-softbox", nombre:"Mizoom, kit de 2 softboxes 50 × 70 cm", precio:85000, tag:"Nuevo · Mizoom", img:"img/mizoom-softbox.jpg", url:"https://www.mizoom.cl/products/kit-softbox-50x70cm-luz-continua-pedestal-20-m", desc:"Dos softboxes de luz continua de 50 × 70 cm con pedestal de 2,0 m." },
+    { id:"fotosimple-softbox", nombre:"FotoSimple, estudio de iluminación RGB softbox con bolso", precio:169990, tag:"Nuevo · FotoSimple", img:"img/fotosimple-softbox.jpg", url:"https://fotosimple.cl/store/producto/estudio-iluminacion-rgb-softbox-bolso/", desc:"Kit de estudio con softbox e iluminación RGB, con bolso para transportarlo." }
+  ]},
+  { id:"verde", nombre:"Pantalla verde", bajada:"Cambiar el fondo sin edición complicada.", productos:[
+    { id:"chroma", nombre:"Kit fondo chroma verde 2 × 3 m con trípodes y bolso", precio:65990, tag:"Nuevo · Mercado Libre", img:"img/chroma-verde.jpg", url:"https://www.mercadolibre.cl/set-fondo-chroma-verde-2x3-metros--tripodes--bolso-telon/up/MLCU3978795750", desc:"Telón verde de 2 × 3 m con trípodes de soporte y bolso de transporte." }
+  ]},
+  { id:"microfono", nombre:"Micrófono", bajada:"Audio limpio: la diferencia más grande entre un video amateur y uno pro.", productos:[
+    { id:"ulanzi-j12", nombre:"Ulanzi J12 inalámbrico doble Lightning", precio:49900, tag:"Nuevo · Ulanzi Chile", img:"img/ulanzi-j12.jpg", url:"https://ulanzi.cl/catalogo/index.php/product/ulanzi-j12-lightning-microfono-inalambrico-doble/", desc:"Dos micrófonos inalámbricos de solapa con conector Lightning (iPhone). Opción económica." },
+    { id:"dji-mic-mini-2", nombre:"DJI Mic Mini 2 (2 TX + 1 RX + Charging Case)", precio:99990, tag:"Nuevo · DJI Chile", img:"img/dji-mic-mini-2.png", url:"https://djichile.cl/dji-mic-mini-2/384-dji-mic-mini-2-2-tx-1-rx-charging-case-6937224139749.html", desc:"Sistema inalámbrico con 2 transmisores, 1 receptor y estuche de carga. Combina con el ecosistema DJI." }
+  ]},
+  { id:"teleprompter", nombre:"Teleprompter", bajada:"Hablar a cámara leyendo el guion sin perder el contacto visual.", productos:[
+    { id:"ulanzi-rt02", nombre:"Ulanzi RT02", precio:74900, tag:"Nuevo · Ulanzi Chile", img:"img/ulanzi-rt02.webp", url:"https://ulanzi.cl/catalogo/index.php/product/ulanzi-rt02-teleprompter-universal-para-camaras-telefonos-o-notebook/", desc:"Teleprompter universal para cámaras, teléfonos o notebook." }
+  ]},
+  { id:"barras", nombre:"Barras LED RGB", bajada:"Color y ambiente de fondo para dar identidad a cada video.", productos:[
+    { id:"ulanzi-vl119", nombre:"Ulanzi VL119 RGB", precio:41900, tag:"Nuevo · Ulanzi Chile", img:"img/ulanzi-vl119.webp", url:"https://ulanzi.cl/catalogo/index.php/product/ulanzi-vl119-rgb-espada-led-multicolor-y-multiples-efectos/", desc:"Barra LED tipo espada, RGB multicolor con múltiples efectos de luz." },
+    { id:"barra-ml-50", nombre:"Barra LED RGB recargable de 50 cm con control", precio:12890, tag:"Nuevo · Mercado Libre", img:"img/barra-led-ml.jpg", url:"https://www.mercadolibre.cl/barra-luz-led-rgb-50cm-fotografia-video-recargable--control/up/MLCU4975724592", desc:"Barra LED RGB de 50 cm, recargable y con control remoto. La más económica." },
+    { id:"fotosimple-barra", nombre:"FotoSimple, kit barra LED RGB con bolso y control remoto", precio:179990, tag:"Nuevo · FotoSimple", img:"img/fotosimple-barra.png", url:"https://fotosimple.cl/store/producto/kit-barra-led-rgb-bolso-control-remoto/", desc:"Kit de barra LED RGB con bolso de transporte y control remoto." }
+  ]},
+  { id:"ia", nombre:"Plan de IA para video", bajada:"Generación de imágenes y video con IA, como suscripción mensual.", productos:[
+    { id:"higgsfield", nombre:"Higgsfield Ultra", precio:null, usd:99, tag:"Suscripción · USD/mes", img:"img/higgsfield.png", url:"https://higgsfield.ai", desc:"Precio promocional facturado mensualmente; renovación a USD 129/mes. Incluye 3.000 créditos/mes (hasta 1.500 generaciones de Nano Banana Pro o ~200 videos de Seedance 2.5)." }
+  ]}
+];
+
+/* ============ ESTADO ============ */
+const $ = (s,r=document)=>r.querySelector(s);
+const CLP = n => "$"+Math.round(n).toLocaleString("es-CL");
+let sel = {};       // categoriaId -> productoId
+let tc = "";        // tipo de cambio opcional
+try{ sel = JSON.parse(localStorage.getItem("opt-cot-sel")||"{}"); tc = localStorage.getItem("opt-cot-tc")||""; }catch(e){}
+const guardar = ()=>{ try{ localStorage.setItem("opt-cot-sel",JSON.stringify(sel)); localStorage.setItem("opt-cot-tc",tc);}catch(e){} };
+const prod = (cat,id)=>cat.productos.find(p=>p.id===id);
+
+/* ============ RENDER ============ */
+const deck = $("#deck");
+const slides = []; // {el,nombre}
+
+function addSlide(nombre, html, cls=""){
+  const s = document.createElement("section");
+  s.className = "slide "+cls; s.innerHTML = '<div class="in">'+html+'</div>';
+  deck.appendChild(s); slides.push({el:s,nombre}); return s;
+}
+
+const ICON_IMG = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="4" width="18" height="16" rx="3"/><circle cx="9" cy="10" r="1.8"/><path d="m4 18 5-5 4 4 3-3 4 4"/></svg>';
+
+function cardHTML(cat,p){
+  return `<article class="card" data-cat="${cat.id}" data-id="${p.id}">
+    <div class="foto"><span class="etq ${/^Nuev/.test(p.tag)?'nuevo':''}">${p.tag}</span>
+      <img src="${p.img}" alt="${p.nombre}" onerror="this.closest('.foto').classList.add('sin')">
+      <div class="falta">${ICON_IMG}<div>Imagen pendiente</div></div></div>
+    <div class="cuerpo">
+      <div class="nom">${p.nombre}</div>
+      <div class="precio">${p.precio!=null?CLP(p.precio):'USD '+p.usd+' <small>/ mes</small>'}</div>
+      <p class="desc">${p.desc}</p>
+      <div class="acc">
+        <a class="ver" href="${p.url}" target="_blank" rel="noopener noreferrer">Ver producto <span aria-hidden="true">↗</span></a>
+        <button class="elegir" data-act="elegir">Elegir</button>
+      </div>
+    </div></article>`;
+}
+
+// Portada
+addSlide("Portada",`
+  <div class="portada">
+    <span class="ceja">Equipo audiovisual · Cotización</span>
+    <h1>Grabar y publicar <span>como pro</span>.</h1>
+    <p class="baja">Los productos que necesitamos para tener un equipo de grabación y subir contenido a redes sociales con calidad profesional. Elige uno por categoría y la cotización final se arma sola.</p>
+    <div class="meta"><span>Para Bastián y César</span><span>${CATEGORIAS.length} categorías</span><span>Precios en CLP</span></div>
+    <button class="btn-prim" id="empezar">Comenzar →</button>
+  </div>
+  <svg class="disco" viewBox="0 0 138.3 138.3" aria-hidden="true"><defs><linearGradient id="gd" x1="0" x2="1"><stop offset="0" stop-color="#91CEC4"/><stop offset="1" stop-color="#387E80"/></linearGradient></defs><path fill="url(#gd)" fill-rule="evenodd" d="M69 4a65 65 0 1 0 65 65c0-9-2-18-6-26-12 6-26-2-26-16 0-12-10-22-22-22-4 0-8-1-11-1z"/><circle cx="108" cy="22" r="13" fill="url(#gd)"/></svg>`);
+
+// Categorías
+CATEGORIAS.forEach((cat,i)=>{
+  const s = addSlide(cat.nombre,`
+    <div class="cab"><div><span class="ceja">${i+1} de ${CATEGORIAS.length}</span><h2>${cat.nombre}</h2><p class="baja">${cat.bajada}</p></div>
+    <div class="sel-estado" data-estado="${cat.id}"></div></div>
+    <div class="grid ${cat.productos.length===1?'uno':''}">${cat.productos.map(p=>cardHTML(cat,p)).join("")}</div>`);
+});
+
+// Cotización final
+const sc = addSlide("Cotización final",`
+  <div class="cab"><div><span class="ceja">Resumen</span><h2>Cotización final</h2><p class="baja">Los productos elegidos y cuánto saldría todo.</p></div></div>
+  <div class="carro">
+    <div class="lista" id="lista"></div>
+    <aside class="resumen" id="resumen"></aside>
+  </div>`);
+
+// Imágenes faltantes
+deck.addEventListener("error",e=>{ if(e.target.tagName==="IMG"){ const f=e.target.closest(".foto"); if(f) f.classList.add("sin"); const m=e.target.closest(".mini"); if(m) m.innerHTML=ICON_IMG; } },true);
+
+/* ============ CARRITO ============ */
+function actualizar(){
+  let n=0, total=0, usd=0;
+  CATEGORIAS.forEach(cat=>{
+    const id = sel[cat.id];
+    cat.productos.forEach(p=>{
+      const card = $(`.card[data-id="${p.id}"]`); const on = id===p.id;
+      card.classList.toggle("elegido",on);
+      const b=$(".elegir",card); b.classList.toggle("on",on); b.textContent = on?"✓ Elegido":"Elegir";
+    });
+    const est = $(`[data-estado="${cat.id}"]`); const p = id&&prod(cat,id);
+    est.classList.toggle("ok",!!p); est.textContent = p? "Elegido: "+p.nombre.split(",")[0] : "Sin elegir";
+    if(p){ n++; if(p.precio!=null) total+=p.precio; else usd+=p.usd; }
+  });
+  $("#chipN").textContent=n;
+  // lista
+  const filas = CATEGORIAS.filter(c=>sel[c.id]).map(c=>{const p=prod(c,sel[c.id]);return `<div class="fila">
+    <div class="mini"><img src="${p.img}" alt="" onerror="this.parentNode.innerHTML=ICON_IMG"></div>
+    <div><div class="cat">${c.nombre}</div><div class="n">${p.nombre}</div></div>
+    <div class="p">${p.precio!=null?CLP(p.precio):'USD '+p.usd+'/mes'}</div>
+    <button class="quitar" data-quitar="${c.id}" aria-label="Quitar ${p.nombre}">×</button></div>`}).join("");
+  $("#lista").innerHTML = filas || '<div class="vacio">Aún no eliges nada. Vuelve a las diapositivas anteriores y presiona “Elegir”.</div>';
+  const faltan = CATEGORIAS.filter(c=>!sel[c.id]).map(c=>c.nombre);
+  const est = tc && usd? usd*Number(tc):0;
+  $("#resumen").innerHTML = `
+    <div class="l"><span>Productos elegidos</span><span>${n} de ${CATEGORIAS.length}</span></div>
+    <div class="l"><span>Subtotal equipos (CLP)</span><span>${CLP(total)}</span></div>
+    ${usd?`<div class="l"><span>Plan IA (mensual)</span><span>USD ${usd}</span></div>
+    <label>Dólar de referencia (CLP), opcional<input id="tc" inputmode="decimal" placeholder="ej. 950" value="${tc}"></label>`:""}
+    <div class="tot"><span>Total hoy</span><b>${CLP(total)}</b></div>
+    ${usd?`<div class="l"><span>+ Mensual por IA</span><span>${est?CLP(est)+' aprox.':'USD '+usd}</span></div>`:""}
+    ${usd&&est?`<div class="l"><span>Primer mes todo incluido</span><span><b style="font-size:16px">${CLP(total+est)}</b></span></div>`:""}
+    ${faltan.length?`<p class="nota">Sin elegir: ${faltan.join(", ")}.</p>`:'<p class="nota">Todas las categorías tienen un producto elegido.</p>'}
+    <button class="btn2" id="limpiar">Vaciar selección</button>
+    <button class="btn2" id="imprimir">Imprimir / guardar PDF</button>`;
+  const t=$("#tc"); if(t) t.addEventListener("input",e=>{ tc=e.target.value.replace(",","."); guardar(); const pos=e.target.selectionStart; actualizar(); const t2=$("#tc"); t2.focus(); t2.setSelectionRange(pos,pos); });
+  guardar();
+}
+
+deck.addEventListener("click",e=>{
+  const b=e.target.closest("[data-act=elegir]");
+  if(b){ const c=b.closest(".card"); const cid=c.dataset.cat, pid=c.dataset.id;
+    if(sel[cid]===pid){ delete sel[cid]; toast("Quitado"); } else { sel[cid]=pid; toast("Elegido ✓"); }
+    actualizar(); return; }
+  const q=e.target.closest("[data-quitar]"); if(q){ delete sel[q.dataset.quitar]; actualizar(); return; }
+  if(e.target.closest("#limpiar")){ sel={}; actualizar(); toast("Selección vaciada"); }
+  if(e.target.closest("#imprimir")) window.print();
+  if(e.target.closest("#empezar")) ir(1);
+});
+
+let tt; function toast(m){ const t=$("#toast"); t.textContent=m; t.classList.add("on"); clearTimeout(tt); tt=setTimeout(()=>t.classList.remove("on"),1100); }
+
+/* ============ NAVEGACIÓN ============ */
+let cur=0;
+const dots=$("#puntos");
+slides.forEach((s,i)=>{ const d=document.createElement("button"); d.setAttribute("aria-label",s.nombre); d.onclick=()=>ir(i); dots.appendChild(d); });
+function ir(i){
+  i=Math.max(0,Math.min(slides.length-1,i)); cur=i;
+  slides.forEach((s,k)=>{ s.el.classList.toggle("on",k===i); s.el.classList.toggle("prev",k<i); });
+  [...dots.children].forEach((d,k)=>d.classList.toggle("on",k===i));
+  $("#prog").style.width=((i+1)/slides.length*100)+"%";
+  $("#secName").textContent = i? slides[i].nombre : "";
+  $("#btnPrev").disabled=i===0; $("#btnNext").disabled=i===slides.length-1;
+  slides[i].el.scrollTop=0;
+  history.replaceState(null,"","#"+(i+1));
+}
+$("#btnPrev").onclick=()=>ir(cur-1); $("#btnNext").onclick=()=>ir(cur+1);
+$("#chipCarro").onclick=()=>ir(slides.length-1);
+addEventListener("keydown",e=>{ if(/INPUT|TEXTAREA/.test(e.target.tagName)) return;
+  if(e.key==="ArrowRight"||e.key==="PageDown") ir(cur+1);
+  if(e.key==="ArrowLeft"||e.key==="PageUp") ir(cur-1);
+  if(e.key==="Home") ir(0); if(e.key==="End") ir(slides.length-1); });
+let x0=null; deck.addEventListener("touchstart",e=>x0=e.touches[0].clientX,{passive:true});
+deck.addEventListener("touchend",e=>{ if(x0==null) return; const dx=e.changedTouches[0].clientX-x0; if(Math.abs(dx)>70) ir(cur+(dx<0?1:-1)); x0=null; });
+
+addEventListener("hashchange",()=>{ const k=(parseInt(location.hash.slice(1))||1)-1; if(k!==cur) ir(k); });
+actualizar();
+ir(Math.max(0,(parseInt(location.hash.slice(1))||1)-1));
+</script>
+</body>
+</html>
