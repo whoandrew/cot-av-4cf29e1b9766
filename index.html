@@ -72,6 +72,16 @@ h2{font-size:clamp(28px,4vw,44px);margin:10px 0 6px;font-weight:800}
 .foto .falta svg{width:38px;height:38px;opacity:.5;margin-bottom:8px}
 .foto.sin img{display:none}
 .foto.sin .falta{display:block}
+.plan{position:absolute;inset:0;padding:44px 20px 16px;display:flex;flex-direction:column;gap:8px;color:#fff;background:radial-gradient(120% 90% at 0% 0%,#7a1a45 0%,#3b0f2a 55%,#220a1a 100%)}
+.plan__t{font-size:24px;font-weight:800;letter-spacing:-.01em;display:flex;gap:8px;align-items:center}
+.plan__t i{font-style:normal;font-size:11px;background:#ff1f5a;border-radius:6px;padding:3px 7px}
+.plan__s{font-size:12px;opacity:.75}
+.plan__p{margin-top:2px;display:flex;align-items:baseline;gap:8px}
+.plan__p s{opacity:.6;font-size:14px;color:#ff6f95}
+.plan__p b{font-size:34px;letter-spacing:-.03em}
+.plan__p small{opacity:.7;font-size:12px}
+.plan ul{list-style:none;padding:0;display:grid;gap:5px;font-size:12.5px;opacity:.95}
+.plan li::before{content:"●";color:#ff4d85;margin-right:7px;font-size:9px}
 .etq{position:absolute;top:10px;left:10px;font-size:11px;font-weight:700;background:var(--navy-prof);color:#fff;border-radius:999px;padding:4px 10px}
 .etq.nuevo{background:var(--acento-osc)}
 .cuerpo{display:flex;flex-direction:column;gap:8px;padding:16px 16px 18px;flex:1}
@@ -150,9 +160,9 @@ h2{font-size:clamp(28px,4vw,44px);margin:10px 0 6px;font-weight:800}
 // Para agregar la imagen de un producto sin foto: guardar el archivo en img/ con el nombre indicado en "img".
 const CATEGORIAS = [
   { id:"camaras", nombre:"Cámaras", bajada:"El corazón del equipo: estabilizada, compacta y lista para grabar a diario.", productos:[
-    { id:"pocket3-usada-nd", nombre:"DJI Osmo Pocket 3 usada, con filtro ND", precio:300000, tag:"Usada · Marketplace", img:"img/pocket3-usada-nd.jpg", url:"https://www.facebook.com/marketplace/item/1550710283768898/", desc:"Cámara gimbal de bolsillo DJI en segunda mano. Incluye filtro ND para controlar la luz en exteriores." },
-    { id:"pocket3-usada", nombre:"DJI Osmo Pocket 3 usada", precio:299000, tag:"Usada · Marketplace", img:"img/pocket3-usada.jpg", url:"https://www.facebook.com/marketplace/item/1088846383734889/", desc:"El mismo modelo en segunda mano, sin filtro ND. La opción usada más económica de la Pocket 3." },
-    { id:"pocket2-usada", nombre:"DJI Osmo Pocket 2 usada, con accesorios", precio:240000, tag:"Usada · Marketplace", img:"img/pocket2-usada.jpg", url:"https://www.facebook.com/marketplace/item/2188664688714728/", desc:"Generación anterior de la Pocket, en segunda mano y con accesorios. Entrada más barata al formato gimbal." },
+    { id:"pocket3-usada-nd", nombre:"DJI Osmo Pocket 3 usada, con filtro ND", precio:300000, tag:"Usada · Marketplace", img:"img/pocket3-usada-nd.webp", url:"https://www.facebook.com/marketplace/item/1550710283768898/", desc:"Cámara gimbal de bolsillo DJI en segunda mano. Incluye filtro ND para controlar la luz en exteriores." },
+    { id:"pocket3-usada", nombre:"DJI Osmo Pocket 3 usada", precio:299000, tag:"Usada · Marketplace", img:"img/pocket3-usada.webp", url:"https://www.facebook.com/marketplace/item/1088846383734889/", desc:"El mismo modelo en segunda mano, sin filtro ND. La opción usada más económica de la Pocket 3." },
+    { id:"pocket2-usada", nombre:"DJI Osmo Pocket 2 usada, con accesorios", precio:240000, tag:"Usada · Marketplace", img:"img/pocket2-usada.png", url:"https://www.facebook.com/marketplace/item/2188664688714728/", desc:"Generación anterior de la Pocket, en segunda mano y con accesorios. Entrada más barata al formato gimbal." },
     { id:"pocket3-nueva", nombre:"DJI Osmo Pocket 3 nueva", precio:419990, tag:"Nueva · Falabella", img:"img/pocket3-nueva.webp", url:"https://www.falabella.com/falabella-cl/product/147560434/Camara-de-accion-DJI-Osmo-Pocket-3/147560435", desc:"Cámara de vlogging con sensor CMOS de 1 pulgada y gimbal. Nueva, con garantía de tienda." },
     { id:"sjcam-sj8", nombre:"SJCAM SJ8 Dual 4K", precio:114990, tag:"Nueva · SJCAM Chile", img:"img/sjcam-sj8.webp", url:"https://sjcam.cl/detalles.php?id=1388&prod=camara-deportiva-sjcam-sj8-dual-4k-30fps-estabilizacion-eis", desc:"Cámara deportiva 4K a 30 fps con estabilización electrónica (EIS). La alternativa más económica." }
   ]},
@@ -161,7 +171,7 @@ const CATEGORIAS = [
     { id:"fotosimple-softbox", nombre:"FotoSimple, estudio de iluminación RGB softbox con bolso", precio:169990, tag:"Nuevo · FotoSimple", img:"img/fotosimple-softbox.jpg", url:"https://fotosimple.cl/store/producto/estudio-iluminacion-rgb-softbox-bolso/", desc:"Kit de estudio con softbox e iluminación RGB, con bolso para transportarlo." }
   ]},
   { id:"verde", nombre:"Pantalla verde", bajada:"Cambiar el fondo sin edición complicada.", productos:[
-    { id:"chroma", nombre:"Kit fondo chroma verde 2 × 3 m con trípodes y bolso", precio:65990, tag:"Nuevo · Mercado Libre", img:"img/chroma-verde.jpg", url:"https://www.mercadolibre.cl/set-fondo-chroma-verde-2x3-metros--tripodes--bolso-telon/up/MLCU3978795750", desc:"Telón verde de 2 × 3 m con trípodes de soporte y bolso de transporte." }
+    { id:"chroma", nombre:"Kit fondo chroma verde 2 × 3 m con trípodes y bolso", precio:65990, tag:"Nuevo · Mercado Libre", img:"img/chroma-verde.webp", url:"https://www.mercadolibre.cl/set-fondo-chroma-verde-2x3-metros--tripodes--bolso-telon/up/MLCU3978795750", desc:"Telón verde de 2 × 3 m con trípodes de soporte y bolso de transporte." }
   ]},
   { id:"microfono", nombre:"Micrófono", bajada:"Audio limpio: la diferencia más grande entre un video amateur y uno pro.", productos:[
     { id:"ulanzi-j12", nombre:"Ulanzi J12 inalámbrico doble Lightning", precio:49900, tag:"Nuevo · Ulanzi Chile", img:"img/ulanzi-j12.jpg", url:"https://ulanzi.cl/catalogo/index.php/product/ulanzi-j12-lightning-microfono-inalambrico-doble/", desc:"Dos micrófonos inalámbricos de solapa con conector Lightning (iPhone). Opción económica." },
@@ -172,11 +182,11 @@ const CATEGORIAS = [
   ]},
   { id:"barras", nombre:"Barras LED RGB", bajada:"Color y ambiente de fondo para dar identidad a cada video.", productos:[
     { id:"ulanzi-vl119", nombre:"Ulanzi VL119 RGB", precio:41900, tag:"Nuevo · Ulanzi Chile", img:"img/ulanzi-vl119.webp", url:"https://ulanzi.cl/catalogo/index.php/product/ulanzi-vl119-rgb-espada-led-multicolor-y-multiples-efectos/", desc:"Barra LED tipo espada, RGB multicolor con múltiples efectos de luz." },
-    { id:"barra-ml-50", nombre:"Barra LED RGB recargable de 50 cm con control", precio:12890, tag:"Nuevo · Mercado Libre", img:"img/barra-led-ml.jpg", url:"https://www.mercadolibre.cl/barra-luz-led-rgb-50cm-fotografia-video-recargable--control/up/MLCU4975724592", desc:"Barra LED RGB de 50 cm, recargable y con control remoto. La más económica." },
+    { id:"barra-ml-50", nombre:"Barra LED RGB recargable de 50 cm con control", precio:12890, tag:"Nuevo · Mercado Libre", img:"img/barra-led-ml.png", url:"https://www.mercadolibre.cl/barra-luz-led-rgb-50cm-fotografia-video-recargable--control/up/MLCU4975724592", desc:"Barra LED RGB de 50 cm, recargable y con control remoto. La más económica." },
     { id:"fotosimple-barra", nombre:"FotoSimple, kit barra LED RGB con bolso y control remoto", precio:179990, tag:"Nuevo · FotoSimple", img:"img/fotosimple-barra.png", url:"https://fotosimple.cl/store/producto/kit-barra-led-rgb-bolso-control-remoto/", desc:"Kit de barra LED RGB con bolso de transporte y control remoto." }
   ]},
   { id:"ia", nombre:"Plan de IA para video", bajada:"Generación de imágenes y video con IA, como suscripción mensual.", productos:[
-    { id:"higgsfield", nombre:"Higgsfield Ultra", precio:null, usd:99, tag:"Suscripción · USD/mes", img:"img/higgsfield.png", url:"https://higgsfield.ai", desc:"Precio promocional facturado mensualmente; renovación a USD 129/mes. Incluye 3.000 créditos/mes (hasta 1.500 generaciones de Nano Banana Pro o ~200 videos de Seedance 2.5)." }
+    { id:"higgsfield", nombre:"Higgsfield Ultra", precio:null, usd:99, tag:"Suscripción · USD/mes", img:"", plan:true, url:"https://higgsfield.ai/es/pricing", desc:"Precio promocional facturado mensualmente; renovación a USD 129/mes. Incluye 3.000 créditos/mes (hasta 1.500 generaciones de Nano Banana Pro o ~200 videos de Seedance 2.5)." }
   ]}
 ];
 
@@ -201,10 +211,13 @@ function addSlide(nombre, html, cls=""){
 
 const ICON_IMG = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="4" width="18" height="16" rx="3"/><circle cx="9" cy="10" r="1.8"/><path d="m4 18 5-5 4 4 3-3 4 4"/></svg>';
 
+const PLAN_VIS = `<div class="plan"><div class="plan__t">ULTRA <i>−23%</i></div><div class="plan__s">Para proyectos ambiciosos con IA</div>
+  <div class="plan__p"><s>USD 129</s> <b>USD 99</b><small>/mes</small></div>
+  <ul><li><b>3.000</b> créditos/mes</li><li>Hasta <b>1.500</b> generaciones de Nano Banana Pro</li><li>~<b>200</b> videos de Seedance 2.5</li></ul></div>`;
 function cardHTML(cat,p){
   return `<article class="card" data-cat="${cat.id}" data-id="${p.id}">
     <div class="foto"><span class="etq ${/^Nuev/.test(p.tag)?'nuevo':''}">${p.tag}</span>
-      <img src="${p.img}" alt="${p.nombre}" onerror="this.closest('.foto').classList.add('sin')">
+      ${p.plan?PLAN_VIS:`<img src="${p.img}" alt="${p.nombre}" onerror="this.closest('.foto').classList.add('sin')">`}
       <div class="falta">${ICON_IMG}<div>Imagen pendiente</div></div></div>
     <div class="cuerpo">
       <div class="nom">${p.nombre}</div>
@@ -264,7 +277,7 @@ function actualizar(){
   $("#chipN").textContent=n;
   // lista
   const filas = CATEGORIAS.filter(c=>sel[c.id]).map(c=>{const p=prod(c,sel[c.id]);return `<div class="fila">
-    <div class="mini"><img src="${p.img}" alt="" onerror="this.parentNode.innerHTML=ICON_IMG"></div>
+    <div class="mini">${p.plan?'<span style="font-weight:800;font-size:11px;color:#ff4d85;background:#3b0f2a;width:100%;height:100%;display:grid;place-items:center">ULTRA</span>':`<img src="${p.img}" alt="" onerror="this.parentNode.innerHTML=ICON_IMG">`}</div>
     <div><div class="cat">${c.nombre}</div><div class="n">${p.nombre}</div></div>
     <div class="p">${p.precio!=null?CLP(p.precio):'USD '+p.usd+'/mes'}</div>
     <button class="quitar" data-quitar="${c.id}" aria-label="Quitar ${p.nombre}">×</button></div>`}).join("");
